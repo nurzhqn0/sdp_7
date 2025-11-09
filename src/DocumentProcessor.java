@@ -34,41 +34,32 @@ public class DocumentProcessor implements ProcessingSubject {
         }
     }
 
-    /**
-     * Process a document through the pipeline
-     */
     public void processDocument(String fileName, String format,
                                 Map<String, String> metadata, String watermark) {
         try {
-            // Start processing
             notifyEvent(ProcessingEvent.PROCESSING_STARTED,
                     "fileName", fileName, "format", format);
 
-            // Load document
             Document document = loadDocument(fileName, format);
             notifyEvent(ProcessingEvent.DOCUMENT_LOADED,
                     "document", document.toString());
 
-            // Add metadata if provided
             if (metadata != null && !metadata.isEmpty()) {
                 addMetadata(document, metadata);
                 notifyEvent(ProcessingEvent.METADATA_ADDED,
                         "count", metadata.size(), "fields", metadata.keySet());
             }
 
-            // Apply watermark if provided
             if (watermark != null && !watermark.isEmpty()) {
                 applyWatermark(document, watermark);
                 notifyEvent(ProcessingEvent.WATERMARK_APPLIED,
                         "watermark", watermark);
             }
 
-            // Validate document
             validateDocument(document);
             notifyEvent(ProcessingEvent.VALIDATION_COMPLETED,
                     "status", "valid");
 
-            // Complete processing
             notifyEvent(ProcessingEvent.PROCESSING_COMPLETED,
                     "document", document.toString(), "success", true);
 
