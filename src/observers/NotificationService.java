@@ -1,4 +1,4 @@
-package services;
+package observers;
 
 import enums.ProcessingEvent;
 import interfaces.ProcessingObserver;
